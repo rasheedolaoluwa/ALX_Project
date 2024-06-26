@@ -6,6 +6,8 @@ from flask import request, redirect, url_for, render_template, flash
 from urllib.parse import urlsplit
 from flask_migrate import Migrate
 from routes.profile import profile
+from routes.investments import investments
+from routes.portfolio import portfolio
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -60,6 +62,8 @@ def logout():
     return redirect(url_for('home'))
 
 app.register_blueprint(profile, url_prefix='/api')
+app.register_blueprint(investments, url_prefix='/api')
+app.register_blueprint(portfolio, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -18,3 +18,26 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f'<User {self.username}>'
+
+class Portfolio(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='portfolios')
+    total_value = db.Column(db.Float, nullable=False, default=0.0)
+
+    def __repr__(self):
+        return f'<Portfolio {self.id} - User {self.user_id}>'
+
+class PortfolioInvestment(db.Model):
+    portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), primary_key=True)
+    investment_id = db.Column(db.String, primary_key=True)
+    quantity = db.Column(db.Float, nullable=False)
+    current_value = db.Column(db.Float, nullable=False)
+
+    portfolio = db.relationship('Portfolio', back_populates='investments')
+
+    def __repr__(self):
+        return f'<PortfolioInvestment {self.portfolio_id} - Investment {self.investment_id}>'
+
+User.portfolios = db.relationship('Portfolio', order_by=Portfolio.id, back_populates='user')
+Portfolio.investments = db.relationship('PortfolioInvestment', order_by=PortfolioInvestment.investment_id, back_populates='portfolio')
