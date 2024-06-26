@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Profile Result{% endblock %}
+{% block content %}
+    <h2>Profile Result</h2>
+    <p>Life Stage Score: {{ profile.life_stage_score }}</p>
+    <p>{{ profile.life_stage_message }}</p>
+    <p>Financial Resources Score: {{ profile.financial_resources_score }}</p>
+    <p>{{ profile.financial_resources_message }}</p>
+    <p>Investment Experience Score: {{ profile.investment_experience_score }}</p>
+    <p>{{ profile.investment_experience_message }}</p>
+    <p>Emotional Risk Tolerance Score: {{ profile.emotional_risk_tolerance_score }}</p>
+    <p>{{ profile.emotional_risk_tolerance_message }}</p>
+    <p>Total Score: {{ profile.total_score }}</p>
+    <p>Risk Category: {{ profile.risk_category }}</p>
+{% endblock %}
