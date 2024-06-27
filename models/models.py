@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import URLSafeTimedSerializer as Serializer
+from flask import current_app
 
 db = SQLAlchemy()
 
@@ -9,13 +11,26 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
-    profile = db.relationship('Profile', backref='user', uselist=False)
+    email_verified = db.Column(db.Boolean, default=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def generate_confirmation_token(self, expiration=600):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'confirm': self.id})
+
+    @staticmethod
+    def verify_confirmation_token(token, expiration=600):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token, max_age=expiration)
+        except:
+            return None
+        return User.query.get(data['confirm'])
 
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
