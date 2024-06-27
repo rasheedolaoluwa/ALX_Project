@@ -18,10 +18,7 @@ login_manager.login_view = 'auth.login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    try:
-        return User.query.get(int(user_id))
-    except ValueError:
-        return None
+    return User.query.get(int(user_id))
 
 app.register_blueprint(profile)
 app.register_blueprint(auth)
