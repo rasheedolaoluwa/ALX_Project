@@ -130,3 +130,36 @@ def determine_risk_category(profile):
         'emotional_risk_tolerance_message': emotional_risk_tolerance_message,
         'risk_category': risk_category
     }
+
+@profile.route('/submit_profile', methods=['POST'])
+@login_required
+def submit_profile():
+    # Calculate total scores for each category
+    life_stage_score = sum([int(value) for value in request.form.getlist('life_stage')])
+    financial_resources_score = sum([int(value) for value in request.form.getlist('financial_resources')])
+    investment_experience_score = sum([int(value) for value in request.form.getlist('investment_experience')])
+    emotional_risk_tolerance_score = sum([int(value) for value in request.form.getlist('emotional_risk_tolerance')])
+    
+    total_score = life_stage_score + financial_resources_score + investment_experience_score + emotional_risk_tolerance_score
+
+    # Determine risk category based on total score
+    if total_score >= 71:
+        risk_category = 'Aggressive'
+    elif total_score >= 46:
+        risk_category = 'Moderate'
+    else:
+        risk_category = 'Conservative'
+
+    # Update user's profile and risk category
+    profile = Profile.query.filter_by(user_id=current_user.id).first()
+    profile.life_stage_score = life_stage_score
+    profile.financial_resources_score = financial_resources_score
+    profile.investment_experience_score = investment_experience_score
+    profile.emotional_risk_tolerance_score = emotional_risk_tolerance_score
+    profile.total_score = total_score
+
+    current_user.risk_category = risk_category
+
+    db.session.commit()
+
+    return redirect(url_for('profile.recommendations'))

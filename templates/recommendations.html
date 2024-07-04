@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Investment Recommendations</title>
+</head>
+<body>
+    <h1>Investment Recommendations</h1>
+    <form action="{{ url_for('recommendations.save_recommendations') }}" method="post">
+        {% for asset_class, percentage in allocations.items() %}
+        <div>
+            <label for="{{ asset_class }}">{{ asset_class }}</label>
+            <input type="number" id="{{ asset_class }}" name="{{ asset_class }}" value="{{ percentage }}" min="0" max="100">%
+        </div>
+        {% endfor %}
+        <button type="submit">Save Allocations</button>
+    </form>
+</body>
+</html>
