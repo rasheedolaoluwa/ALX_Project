@@ -7,11 +7,69 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Project Ranora</h1>
-        <p>This is the home page. Use the navigation menu to register or log in.</p>
-        <a href="{{ url_for('auth.register') }}">Register</a>
-        <a href="{{ url_for('auth.login') }}">Login</a>
-    </div>
+    <header class="header">
+        <nav class="navbar">
+            <ul>
+                <li><a href="#section1">Project</a></li>
+                <li><a href="#section2">Features</a></li>
+                <li><a href="#section3">About</a></li>
+                <li><a href="#section4">Video</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Section 1: Introduction -->
+    <section id="section1" class="intro-section">
+        <div class="cover-image">
+            <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Cover Image">
+        </div>
+        <div class="intro-text">
+            <h1>Project Ranora</h1>
+            <p>Your Wealth Management Solution</p>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Go to App</a>
+        </div>
+    </section>
+
+    <!-- Section 2: Key Features -->
+    <section id="section2" class="features-section">
+        <h2>Key Features</h2>
+        <div class="feature">
+            <img src="{{ url_for('static', filename='images/pm.jpg') }}" alt="Feature 1 Image">
+            <h3>Feature 1: Comprehensive Portfolio Management</h3>
+            <p>Manage your investments efficiently with our all-in-one portfolio management system.</p>
+        </div>
+        <div class="feature">
+            <img src="{{ url_for('static', filename='images/an.jpg') }}" alt="Feature 2 Image">
+            <h3>Feature 2: Real-time Analytics</h3>
+            <p>Get real-time insights into your investment performance and market trends.</p>
+        </div>
+        <div class="feature">
+            <img src="{{ url_for('static', filename='images/1604619736968.jpeg') }}" alt="Feature 3 Image">
+            <h3>Feature 3: Personalized Recommendations</h3>
+            <p>Receive investment recommendations tailored to your risk tolerance and financial goals.</p>
+        </div>
+    </section>
+
+    <!-- Section 3: About -->
+    <section id="section3" class="about-section">
+        <h2>About Project Ranora</h2>
+        <p>This project was inspired by the need for a comprehensive and user-friendly wealth management solution. Our team is dedicated to providing the best tools and insights to help you manage your investments effectively.</p>
+        <p>Meet the Developer:</p>
+        <ul class="team-links">
+            <li><a href="https://www.linkedin.com/in/developer-linkedin" target="_blank">LinkedIn</a></li>
+            <li><a href="https://github.com/developer-github" target="_blank">GitHub</a></li>
+            <li><a href="https://twitter.com/developer-twitter" target="_blank">Twitter</a></li>
+        </ul>
+        <p>Check out the project on GitHub:</p>
+        <a href="https://github.com/project-repository" target="_blank" class="btn btn-secondary">GitHub Repository</a>
+    </section>
+
+    <!-- Section 4: Video -->
+    <section id="section4" class="video-section">
+        <h2>Project Introduction Video</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </section>
 </body>
 </html>
