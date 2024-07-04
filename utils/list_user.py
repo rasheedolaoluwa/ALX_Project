@@ -1,17 +1,19 @@
-# utils/list_users.py
-import sys
 import os
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from config.config import Config
 
-# Add the project directory to the sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+app = Flask(__name__)
+app.config.from_object(Config)
+db = SQLAlchemy(app)
 
-from app import app
-from models.models import db, User
+from models.models import User
 
-with app.app_context():
+def list_users():
     users = User.query.all()
-    if users:
-        for user in users:
-            print(f"Username: {user.username}, Email: {user.email}, Email Verified: {user.email_verified}")
-    else:
-        print("No users found.")
+    for user in users:
+        print(f"ID: {user.id}, Username: {user.username}, Email: {user.email}, Email Verified: {user.email_verified}")
+
+if __name__ == '__main__':
+    with app.app_context():
+        list_users()

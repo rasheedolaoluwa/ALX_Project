@@ -4,31 +4,38 @@ from models.models import db, User
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from extensions import mail
-from routes.profile import profile
-from routes.auth import auth
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db.init_app(app)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    
+    db.init_app(app)
+    mail.init_app(app)
+    migrate = Migrate(app, db)
+    
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
 
-migrate = Migrate(app, db)
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+    
+    from routes.profile import profile as profile_blueprint
+    from routes.auth import auth as auth_blueprint
+    from routes.recommendations import recommendations as recommendations_blueprint
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'auth.login'
+    app.register_blueprint(profile_blueprint, url_prefix='/profile')
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    app.register_blueprint(recommendations_blueprint, url_prefix='/recommendations')
 
-mail.init_app(app)
+    @app.route('/')
+    def index():
+        return render_template('index.html')
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+    return app
 
-app.register_blueprint(profile)
-app.register_blueprint(auth)
-
-@app.route('/')
-def home():
-    return render_template('landing.html')
+app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)

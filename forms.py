@@ -1,13 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, RadioField
 from wtforms.validators import DataRequired, Email, EqualTo
-from questions import life_stage_questions, financial_resources_questions, investment_experience_questions, emotional_risk_tolerance_questions
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
-    confirm = PasswordField('Repeat Password')
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
 class LoginForm(FlaskForm):
@@ -15,19 +14,33 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-def create_dynamic_form(questions):
-    class DynamicForm(FlaskForm):
-        pass
+class LifeStageForm(FlaskForm):
+    q1 = RadioField('What is your current age?', choices=[('1', '60 or older'), ('2', '50 to 59'), ('3', '40 to 49'), ('4', '30 to 39'), ('5', '20 to 29')], validators=[DataRequired()])
+    q2 = RadioField('When do you expect to need to withdraw cash from your investment portfolio?', choices=[('1', 'Less than 1 year'), ('2', '1 to 2 years'), ('3', '2 to 5 years'), ('4', '5 to 10 years'), ('5', 'Not for at least 10 years')], validators=[DataRequired()])
+    q3 = RadioField('Which best describes you?', choices=[('1', 'Young family with a home. Mortgage and childcare costs, maintaining only small cash balances.'), ('2', 'Retired. Rely on existing funds and investments to maintain lifestyle in retirement.'), ('3', 'Mature family. In peak earning years, mortgage under control. Ready to start planning for retirement.'), ('4', 'Preparing for retirement. Own home and few financial burdens.'), ('5', 'Single with few financial burdens.')], validators=[DataRequired()])
+    submit = SubmitField('Next')
 
-    for i, q in enumerate(questions):
-        field_name = f'q{i+1}'
-        choices = [(str(a["score"]), a["answer"]) for a in q["answers"]]
-        setattr(DynamicForm, field_name, RadioField(q["question"], choices=choices, validators=[DataRequired()]))
+class FinancialResourcesForm(FlaskForm):
+    q1 = RadioField('How many months of current living expenses could you cover with your present savings and liquid, short-term investments, before you would have to draw on your investment portfolio?', choices=[('1', 'Less than 3 months.'), ('2', '3 to 6 months.'), ('3', '6 to 12 months.'), ('4', 'More than 12 months.')], validators=[DataRequired()])
+    q2 = RadioField('Over the next few years, what do you expect will happen to your income?', choices=[('1', 'It will probably decrease substantially'), ('2', 'It will probably decrease slightly'), ('3', 'It will probably stay the same'), ('4', 'It will probably increase slightly'), ('5', 'It will probably increase substantially')], validators=[DataRequired()])
+    q3 = RadioField('What percentage of your gross annual income have you been able to save in recent years?', choices=[('1', 'None'), ('2', '1 to 5%'), ('3', '5 to 10%'), ('4', '10 to 15%'), ('5', 'more than 15%')], validators=[DataRequired()])
+    q4 = RadioField('Over the next few years, what do you expect will happen to your rate of savings?', choices=[('1', 'It will probably decrease substantially'), ('2', 'It will probably decrease slightly'), ('3', 'It will probably stay the same'), ('4', 'It will probably increase slightly'), ('5', 'It will probably increase substantially')], validators=[DataRequired()])
+    submit = SubmitField('Next')
 
-    setattr(DynamicForm, 'submit', SubmitField('Next'))
-    return DynamicForm
+class InvestmentExperienceForm(FlaskForm):
+    q1 = RadioField('How familiar are you with investment matters?', choices=[('1', 'Not familiar at all and feel uncomfortable with the complexity.'), ('2', 'Not very familiar when it comes to investments.'), ('3', 'Somewhat familiar, I don’t fully understand investments.'), ('4', 'Fairly familiar. I understand the various factors which influence investment performance.'), ('5', 'Very familiar. I use research and other investment information to make investment decisions.')], validators=[DataRequired()])
+    q2 = RadioField('How long have you been investing, not counting your home or bank type deposits?', choices=[('1', 'This is my/our first investment.'), ('2', 'Less than 3 years.'), ('3', '3 to 5 years.'), ('4', '6 to 10 years.'), ('5', '10+ years.')], validators=[DataRequired()])
+    submit = SubmitField('Next')
 
-LifeStageForm = create_dynamic_form(life_stage_questions)
-FinancialResourcesForm = create_dynamic_form(financial_resources_questions)
-InvestmentExperienceForm = create_dynamic_form(investment_experience_questions)
-EmotionalRiskToleranceForm = create_dynamic_form(emotional_risk_tolerance_questions)
+class EmotionalRiskToleranceForm(FlaskForm):
+    q1 = RadioField('What are your return expectations for your portfolio?', choices=[('1', 'I don’t care if my portfolio keeps pace with inflation; I just want to preserve my capital'), ('2', 'My return should keep pace with inflation, with minimum volatility.'), ('3', 'My return should be slightly more than inflation, with only moderate volatility.'), ('4', 'My return should significantly exceed inflation, even if this could mean significant volatility.')], validators=[DataRequired()])
+    q2 = RadioField('How would you characterize your personality?', choices=[('1', 'I’m a pessimist. I always expect the worst.'), ('2', 'I’m anxious. No matter what you say, I’ll worry.'), ('3', 'I’m cautious but open to new ideas. Convince me.'), ('4', 'I’m objective. Show me the pros and cons and I can make decisions and live with it.'), ('5', 'I’m optimistic. Things always work out in the end.')], validators=[DataRequired()])
+    q3 = RadioField('Which would you prefer?', choices=[('1', 'Lower returns with negligible swings in portfolio value'), ('2', 'Slightly higher returns with small swings in portfolio value'), ('3', 'Moderate returns with moderate swings in portfolio value'), ('4', 'Large returns annually with negative returns once in 6 years'), ('5', 'Even higher returns annually with negative returns once in 3 years')], validators=[DataRequired()])
+    q4 = RadioField('When monitoring your investments over time, what do you think you will tend to focus on?', choices=[('1', 'Individual investments that are doing poorly.'), ('2', 'Individual investments that are doing very well.'), ('3', 'The recent results of my overall portfolio.'), ('4', 'The long-term performance of my overall portfolio.')], validators=[DataRequired()])
+    q5 = RadioField('Suppose you had N10,000,000 to invest and the choice of 5 different portfolios with a range of possible outcomes after a single year. Which of the following portfolios would you feel most comfortable investing in?', choices=[('1', 'Portfolio A, which could have a balance ranging from N9,900,000 to N10,300,000 at the end of the year.'), ('2', 'Portfolio B, which could have a balance ranging from N9,800,000 to N10,600,000 at the end of the year.'), ('3', 'Portfolio C, which could have a balance ranging from N9,600,000 to N11,000,000 at the end of the year.'), ('4', 'Portfolio D, which could have a balance ranging from N9,200,000 to N12,200,000 at the end of the year.'), ('5', 'Portfolio E, which could have a balance ranging from N8,400,000 to N14,000,000 at the end of the year.')], validators=[DataRequired()])
+    q6 = RadioField('Which statement best describes your investment goals?', choices=[('1', 'Protect the value of my portfolio. In order to minimize the chance for loss, I am willing to accept the lower long-term returns provided by conservative investments.'), ('2', 'Keep risk to a minimum while trying to achieve slightly higher returns than the returns provided by investments that are more conservative'), ('3', 'Balance moderate levels of risk with moderate levels of returns.'), ('4', 'Maximize long-term investment returns. I am willing to accept large and sometimes dramatic short-term fluctuations in the value of this portfolio')], validators=[DataRequired()])
+    q7 = RadioField('If the value of your investment portfolio dropped by 20% in one year, what would you do?', choices=[('1', 'Fire my investment advisor.'), ('2', 'Move my money to more conservative investments immediately to reduce the potential for future losses.'), ('3', 'Monitor the situation, and if it looks like things could continue to deteriorate, move some of my money to more conservative investments.'), ('4', 'Consult with my investment advisor to ensure that my asset allocation is correct, and then ride it out.'), ('5', 'Consider investing more because prices are so low.')], validators=[DataRequired()])
+    q8 = RadioField('Which portfolio would you feel most comfortable investing in?', choices=[('1', 'Portfolio A : returns 6% annually with no negative returns'), ('2', 'Portfolio B : Returns 10% annually with negative returns once in 10 years'), ('3', 'Portfolio C : Returns 15 Percent with negative returns once in 7 years'), ('4', 'Portfolio D : 20% annually with negative returns once in 5 years'), ('5', 'Portfolio E : 25% returns annually with negative returns once in 3 years')], validators=[DataRequired()])
+    q9 = RadioField('Do you trade investments on a regular basis?', choices=[('1', 'No, I normally hold investments for more than 5 years'), ('2', 'No, I normally hold investments for more than 1 year'), ('3', 'Yes, More than once every six months'), ('4', 'Yes, More than once a month'), ('5', 'Yes, more than 30 times a year')], validators=[DataRequired()])
+    q10 = RadioField('Which of the following risks or events do you fear most?', choices=[('1', 'A loss of principal over any period of 1 year or less.'), ('2', 'A rate of inflation that exceeds my rate of return over the long term, because it will erode the purchasing power of my money.'), ('3', 'Portfolio performance that is insufficient to meet my goals.'), ('4', 'Portfolio performance that is consistently less than industry benchmarks.'), ('5', 'A missed investment opportunity that could have yielded higher returns over the long term, even though it entailed higher risk')], validators=[DataRequired()])
+    submit = SubmitField('Submit')

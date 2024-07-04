@@ -2,18 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Investment Recommendations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Investment Recommendations</h1>
-    <form action="{{ url_for('recommendations.save_recommendations') }}" method="post">
-        {% for asset_class, percentage in allocations.items() %}
-        <div>
-            <label for="{{ asset_class }}">{{ asset_class }}</label>
-            <input type="number" id="{{ asset_class }}" name="{{ asset_class }}" value="{{ percentage }}" min="0" max="100">%
-        </div>
-        {% endfor %}
-        <button type="submit">Save Allocations</button>
-    </form>
+    <div class="container">
+        <h1>Investment Recommendations</h1>
+        <p><strong>Risk Category:</strong> {{ risk_category }}</p>
+        <h2>Asset Allocation</h2>
+        <ul>
+            {% for asset_class, percentage in allocation.items() %}
+                <li>{{ asset_class }}: {{ percentage }}%</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

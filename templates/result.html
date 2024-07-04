@@ -1,15 +1,20 @@
-{% extends "base.html" %}
-{% block title %}Profile Result{% endblock %}
-{% block content %}
-    <h2>Profile Result</h2>
-    <p>Life Stage Score: {{ profile.life_stage_score }}</p>
-    <p>{{ profile.life_stage_message }}</p>
-    <p>Financial Resources Score: {{ profile.financial_resources_score }}</p>
-    <p>{{ profile.financial_resources_message }}</p>
-    <p>Investment Experience Score: {{ profile.investment_experience_score }}</p>
-    <p>{{ profile.investment_experience_message }}</p>
-    <p>Emotional Risk Tolerance Score: {{ profile.emotional_risk_tolerance_score }}</p>
-    <p>{{ profile.emotional_risk_tolerance_message }}</p>
-    <p>Total Score: {{ profile.total_score }}</p>
-    <p>Risk Category: {{ profile.risk_category }}</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Profile Result</h1>
+        <p><strong>Life Stage:</strong> {{ profile.life_stage_message }}</p>
+        <p><strong>Financial Resources:</strong> {{ profile.financial_resources_message }}</p>
+        <p><strong>Investment Experience:</strong> {{ profile.investment_experience_message }}</p>
+        <p><strong>Emotional Risk Tolerance:</strong> {{ profile.emotional_risk_tolerance_message }}</p>
+        <p><strong>Overall Risk Category:</strong> {{ profile.risk_category }}</p>
+        <a href="{{ url_for('recommendations.show_recommendations') }}" class="btn btn-primary">Show Recommendations</a>
+    </div>
+</body>
+</html>
