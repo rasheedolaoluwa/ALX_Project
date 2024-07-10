@@ -6,7 +6,7 @@ Welcome to my ALX_Project, a comprehensive web application designed to provide t
 
 ### Links
 - **[Deployed Site](http://rasheeed.tech/)**
-- **[Final Project Blog Article](#)**
+- **[Final Project Blog Article](https://www.linkedin.com/pulse/alx-project-blog-rasheed-olaoluwa-gepsf)**
 - **Authors:**
   - [LinkedIn](https://www.linkedin.com/in/radeyola) - Rasheed Olaoluwa
 
